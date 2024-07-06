@@ -1,0 +1,8 @@
+.conversation {
+  height: 200px;
+}
+
+.card.message-card {
+  height: 500px;
+  overflow: scroll;
+}
