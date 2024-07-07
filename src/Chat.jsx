@@ -1,19 +1,10 @@
 /* eslint react/prop-types: 0 */
-import { useState } from 'react';
-
-export default function Chat({ data }) {
-  const [messages, setMessages] = useState([])
-
-  console.log(messages)
-
-  async function handleSubmit(e) {
+export default function Chat({ id, messages = [], addMessages }) {
+  function handleSubmit(e) {
     e.preventDefault()
     const text = e.target.elements.text.value
     e.target.elements.text.value = ''
-    const message = { id: Number(new Date()), role: "user", text }
-    const reply = await sendMessage(text)
-
-    setMessages([...messages, message, reply])
+    sendMessage(text)
   }
 
   async function sendMessage(text) {
@@ -22,7 +13,7 @@ export default function Chat({ data }) {
     const body = JSON.stringify({
       message: {
         from: {
-          id: data.id
+          id
         },
         text
       }
@@ -30,15 +21,14 @@ export default function Chat({ data }) {
 
     const response = await fetch(url, { method: "POST", body, headers })
     const responseBody = await response.json()
-
-    return { id: Number(new Date()), role: "assistant", text: responseBody.text }
+    addMessages(responseBody.messages)
   }
 
   return (
     <div className="col-md-3 mt-5">
       <div className="card p-2 message-card">
         {messages.map(message =>
-          <p 
+          <p
             key={message.id}
             className={message.role === "assistant" ? "text-primary" : ""}
           >
