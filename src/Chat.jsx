@@ -8,7 +8,7 @@ export default function Chat({ id, messages = [], addMessages }) {
   }
 
   async function sendMessage(text) {
-    const url = "http://localhost:3000/api/messages"
+    const url = `${import.meta.env.VITE_BACKEND_URL}/api/messages`
     const headers = { "Content-Type": "application/json" }
     const body = JSON.stringify({
       message: {
